@@ -1,101 +1,74 @@
-import Image from "next/image";
+'use client'
+import { useState } from "react";
+import ArrayDisplay from "@/components/ArrayDisplay";
+
+const SORT_CHECK_INTERVAL = 1000;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [itemsSorted, setItemsSorted] = useState(0);
+  const [itemsUnsorted, setItemsUnsorted] = useState(1000);
+  const [arrayCount, setArrayCount] = useState(1000);
+  const [inputValue, setInputValue] = useState<string>(arrayCount.toString());
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  const handleSortSuccess = () => {
+    setItemsSorted((prevSorted) => prevSorted + 1);
+    setItemsUnsorted((prevUnsorted) => prevUnsorted - 1);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const count = parseInt(inputValue, 10);
+    if (count > 0 && count !== arrayCount) {
+      setArrayCount(count);
+      setItemsSorted(0);
+      setItemsUnsorted(count);
+    }
+  };
+
+  return (
+    <section>
+      <section className="p-5 flex flex-col border-b-2 border-black dark:border-white border-opacity-25 dark:border-opacity-25">
+        <h1 className="text-xl font-bold">Cosmic-Ray Sort</h1>
+        <span className="opacity-75">Status</span>
+        <section className="flex items-center gap-x-6">
+          <section className="flex flex-col">
+            <span className="flex items-center gap-x-1">
+              <span className="text-red-500 text-4xl animate-pulse">
+                &#8903;
+              </span>
+              Items Unsorted
+            </span>
+            <span className="ml-[30px] opacity-50">{itemsUnsorted}</span>
+          </section>
+          <section className="flex flex-col">
+            <span className="flex items-center gap-x-1">
+              <span className="text-green-500 text-4xl animate-pulse">
+                &#8903;
+              </span>
+              Items Sorted
+            </span>
+            <span className="ml-[30px] opacity-50">{itemsSorted}</span>
+          </section>
+        </section>
+
+        {/* Input for array count */}
+        <form onSubmit={handleSubmit} className="mt-4">
+          <input
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            min="1"
+            className="p-2 border border-gray-300 rounded"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <button type="submit" className="ml-2 p-2 bg-blue-500 text-white rounded">Submit</button>
+        </form>
+      </section>
+
+      <ArrayDisplay
+        onSortSuccess={handleSortSuccess}
+        arrayCount={arrayCount}
+        sortCheckInterval={SORT_CHECK_INTERVAL}
+      />
+    </section>
   );
 }
