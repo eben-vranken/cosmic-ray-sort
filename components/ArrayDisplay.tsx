@@ -31,6 +31,7 @@ const ArrayDisplay: React.FC<ArrayDisplayProps> = ({ onSortSuccess, arrayCount, 
             setArrays(sortedArrays);
             setIsSorting(false);
         }, 1000);
+
     }, [arrays, isSorting, onSortSuccess]);
 
     const checkArray = (arr: number[]) => {

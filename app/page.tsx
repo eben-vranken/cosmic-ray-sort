@@ -58,7 +58,7 @@ export default function Home() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             min="1"
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border border-stone-800 dark:border-gray-300 rounded bg-transparent"
           />
           <button type="submit" className="ml-2 p-2 bg-blue-500 text-white rounded">Submit</button>
         </form>
